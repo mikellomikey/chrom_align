@@ -5,6 +5,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import math
 import random
+import os
 
 
 #Chromatographic data in a Dataframe.Data generated
@@ -33,10 +34,10 @@ for w in width:
     sigma.append(w / 4)
 
 #x-axis as the period of retention time  
-x_data = np.arange(0, 7, 0.001)
+x_data = np.arange(0, 10, 0.001)
 
 
-noise = np.random.normal(0, 1, len(x_data))
+noise = np.random.normal(0, 0.05, len(x_data))
 # Noise up the original signal
 
 for sig,mu in zip(sigma, retentionTime):
@@ -54,3 +55,6 @@ plt.title("Chromatogram")
 plt.plot(x_data, y_data)
 
 plt.show()
+
+
+plt.savefig('Outputs/chromatogram.png')
