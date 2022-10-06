@@ -27,7 +27,9 @@ def model(position, width, H):
 x_data = np.arange(0, 10, 0.001)
 y_1 =  model(retentionTime[0], sigma[0], 5)
 y_2 =  model(retentionTime[0], sigma[0], 3) 
-y_data = y_1 + y_2
+y_3 = model(retentionTime[1], sigma[1], 8) 
+y_4 = model(retentionTime[1], sigma[1], 2) 
+y_data = y_1 + y_2 + y_3 + y_4
+plt.plot(x_data, y_data)
 
-plt.plot(x_data, y_1, x_data, y_2)
 plt.show()
