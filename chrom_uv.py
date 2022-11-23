@@ -6,11 +6,10 @@ from scipy import stats
 import math
 import random
 
-#Generating a chromatogram at different wavelengths 200nm and 250nm
-#Lambda max for compound A is 250nm
+#Generating a chromatogram using the gaussian equation with parameters, mu and sigma
 
 
-retentionTime = [3.6]
+retentionTime = [3.6, 2.46, 1.30, 4.22, 6.5]
 width = []
 N = 3000 #Column efficiency
 
@@ -21,40 +20,31 @@ sigma = []
 for w in width:
     sigma.append(w / 4)
 
-H = 0.4 / sigma[0]
-
-#the X-axis as the retention time
 
 
-# Generating clean data
+#the X-axis as the retentiontime
+
 x_data = np.arange(0, 10, 0.001)
 
+# H is the automatically generated peak height from the gaussian equation
+# x,mu and s represent x-axis,retention time and peak width respectively
+
+
+def peak(x, mu, s):
+    H = 1 / math.sqrt(2 * math.pi * s**2) # H is the automatically generated peak height from the gaussian function which can be manipulated
+    return H * np.exp(-0.5 / s**2 * (x - mu)**2) # gaussian output
 
  
-#Set the required wavelength
 
-     
-y_2 = 0.05 * stats.norm.pdf(x_data, retentionTime[0], sigma[0])
-y_3 = 0.8 * stats.norm.pdf(x_data, retentionTime[0], sigma[0])
-y_4 = 0.4 * stats.norm.pdf(x_data, retentionTime[0], sigma[0])
-y_5 = 0.23 * stats.norm.pdf(x_data, retentionTime[0], sigma[0])
-y_6 = 0.36 * stats.norm.pdf(x_data, retentionTime[0], sigma[0])
-y_7 = 0.5 * stats.norm.pdf(x_data, retentionTime[0], sigma[0])
-y_8 = 0.15 * stats.norm.pdf(x_data, retentionTime[0], sigma[0])
-y_9 = 0.67 * stats.norm.pdf(x_data, retentionTime[0], sigma[0])
-y_10 = 0.74 * stats.norm.pdf(x_data, retentionTime[0], sigma[0])
-    
-y_data = stats.norm.pdf(x_data, retentionTime[0], sigma[0]) + y_2 + y_3 + y_4 + y_5 + y_6 + y_7 + y_8 + y_9 + y_10
+
+y_data = peak(x_data, retentionTime[0], sigma[0]) + peak(x_data, retentionTime[1], sigma[1]) + peak(x_data, retentionTime[2], sigma[2])
+
 
 plt.plot(x_data, y_data)
-
 plt.xlabel("Retention Time(min)")
 plt.ylabel("Peak Height")
 plt.title("Chromatogram using UV detector")
-plt.legend(['@ 250nm(lambda max)', '@ 200nm', '@ 239nm', '@ 240nm', '@ 269nm', '@ 215nm', '@ 224nm', '@ 235nm', '@ 266nm', '@270nm'])
+
 
 plt.show()
-
-plt.savefig('Outputs/chromatogram.jpeg')
-    
 
